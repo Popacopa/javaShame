@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Личный кабинет | Клиент</title>
+    <style>
+        /* Глобальный сброс и базовая настройка — чистый минимализм */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.4;
+            color: #1a1a1a;
+            min-height: 100vh;
+            
+        }
+
+        .dashboard-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Карточки — единый минималистичный стиль */
+        .profile-card, .orders-card, .restaurants-card, .action-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 1.8rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease;
+            border: 1px solid #f0f2f4;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 550;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.25rem;
+            color: #111;
+        }
+
+        .section-sub {
+            font-size: 0.85rem;
+            color: #6b6b6b;
+            margin-bottom: 1.5rem;
+            border-left: 2px solid #eaeef2;
+            padding-left: 0.75rem;
+        }
+
+        .profile-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .profile-info {
+            flex: 2;
+            min-width: 200px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .info-label {
+            font-weight: 500;
+            width: 100px;
+            color: #2c2c2c;
+            font-size: 0.85rem;
+            letter-spacing: -0.2px;
+        }
+
+        .info-value {
+            color: #1a1a1a;
+            font-size: 1rem;
+            font-weight: 450;
+            word-break: break-word;
+        }
+
+        .badge-status {
+            background: #f4f6f9;
+            padding: 0.25rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+            color: #2c3e2f;
+        }
+
+        /* Кнопки в стиле минимализма */
+        .btn-outline, .btn-primary {
+            background: #000000;
+            color: white;
+            border: none;
+            padding: 0.65rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: inherit;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: -0.2px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #1f1f1f;
+            border: 1px solid #e2e6ea;
+        }
+
+        /* .btn-outline:hover {
+            background: #f8f9fc;
+            transform: scale(0.98);
+        } */
+
+        .btn-primary:hover {
+            background: #2c2c2c;
+            transform: scale(0.98);
+        }
+
+        .btn-primary:active, .btn-outline:active {
+            transform: scale(0.97);
+        }
+
+        /* Стили для списка заказов (полностью сохранены) */
+        .orders-list, .restaurants-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .order-item, .restaurant-item {
+            background: #fefefe;
+            border-radius: 20px;
+            border: 1px solid #f0f2f5;
+            padding: 1rem 1.2rem;
+            transition: 0.1s ease;
+        }
+
+        .order-header, .restaurant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 0.6rem;
+        }
+
+        .order-id, .restaurant-cuisine {
+            font-weight: 600;
+            font-size: 0.85rem;
+            background: #f4f6fa;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+        }
+
+        .order-status {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            background: #eef2f5;
+            color: #2b4f2b;
+        }
+
+        .order-status.delivered {
+            background: #e6f4ea;
+            color: #2e6b2f;
+        }
+
+        .order-status.processing {
+            background: #fff0db;
+            color: #b45f06;
+        }
+
+        .order-status.cancelled {
+            background: #feeceb;
+            color: #b13b3b;
+        }
+
+        .order-details, .restaurant-details {
+            font-size: 0.9rem;
+            color: #4a4a4a;
+            margin: 0.5rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .order-amount {
+            font-weight: 600;
+            color: #111;
+        }
+
+        .restaurant-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.85rem;
+            color: #f5a623;
+        }
+
+        .restaurant-delivery {
+            font-size: 0.75rem;
+            background: #f0f0f0;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            color: #4a4a4a;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 760px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .full-width {
+                grid-column: span 1;
+            }
+            .profile-card, .orders-card, .restaurants-card, .action-card {
+                padding: 1.4rem;
+            }
+            .section-title {
+                font-size: 1.3rem;
+            }
+            .info-label {
+                width: 85px;
+            }
+        }
+
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f1f1f;
+            color: white;
+            padding: 0.6rem 1.4rem;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            z-index: 1000;
+            font-weight: 450;
+            white-space: nowrap;
+            background: #2c2c2c;
+        }
+        .toast-message.show {
+            opacity: 1;
+        }
+
+        .modalWrapper {
+
+            border: 1px solid black;
+            position:fixed;
+            min-width: 100vw;
+            min-height: 100vh;
+            background: #00000063;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 0;
+        }
+        .modal {
+            padding: 10px;
+            box-shadow: 0 0 0 10px 20px black;
+            position: absolute;
+            display: block;
+            border-radius: 20px;
+            background-color: #ffffff;
+        }
+        .set-visible {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div id="orderModal" class="modalWrapper">
+        <div  class="modal">
+            <div class="modal-content">
+                <form action="">
+                            <div class="modal-header">
+                            <h2 class="modal-title">Оформление заказа</h2>
+                            <button class="close-modal" id="closeModalBtn">&times;</button>
+                        </div>
+
+                        <!-- Выбор ресторана -->
+                        <div class="form-group">
+                            <label for="restaurantSelect">Выберите ресторан</label>
+                            <select id="restaurantSelect">
+                                <option value="" th:each="rest : ${restorants}" th:text="${rest.restname}">...</option>
+                            </select>
+                        </div>
+
+                        <!-- Список еды (появляется после выбора ресторана) -->
+                        <div class="form-group" id="foodGroup">
+                            <label>Выберите блюда</label>
+                            <div id="foodList" class="food-list"></div>
+                        </div>
+
+                        <!-- Корзина выбранных блюд -->
+                        <div id="cartSection">
+                            <div class="selected-items" id="selectedItems"></div>
+                            <div class="total-section">
+                                <span>Итого: </span>
+                                <span class="total-amount" id="totalAmount">0 ₽</span>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Кнопки -->
+                        <div class="form-buttons">
+                            <button class="btn-secondary" id="cancelBtn">Отмена</button>
+                            <button class="btn-primary" id="submitOrderBtn">Оформить заказ</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+<div class="dashboard-wrapper">
+    <!-- Карточка профиля (основная информация) -->
+    <div class="profile-card">
+        <div class="flex-between">
+            <div>
+                <div class="section-title">Личный кабинет</div>
+                <div class="section-sub">Управление профилем и заказами</div>
+            </div>
+            <button class="btn-outline" id="logoutBtn" style="background:transparent;">Выйти</button>
+        </div>
+
+        <div class="profile-grid">
+            <div class="profile-info">
+                <div class="info-row">
+                    <span class="info-label">Логин</span>
+                    <span class="info-value" id="profileLogin" th:text="${client.login}">...</span>
+                    <span class="section-sub" th:text="${client.lastname}"></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Роль</span>
+                    <span class="info-value"><span class="badge-status">Пользователь</span></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Телефон</span>
+                    <span class="info-value" id="profilePhone" th:text="${client.phone}">...</span>
+                </div>
+                <!-- <div class="info-row">
+                    <span class="info-label">Email</span>
+                    <span class="info-value" id="profileEmail">alex@example.com</span>
+                </div> -->
+            </div>
+            <div style="display: flex; gap: 0.8rem; align-items: center;">
+                <button class="btn-primary" id="editProfileBtn">Редактировать профиль</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Сетка с заказами и ресторанами -->
+    <div class="dashboard-grid">
+        <!-- Блок последних заказов (история) -->
+        <div class="orders-card">
+            <div class="section-title" style="font-size:1.3rem;">Мои заказы</div>
+            <div class="section-sub">Актуальная история</div>
+            <div id="ordersContainer" class="orders-list">
+                <div class="orderwrapper" th:each="order : ${bookinglist}">
+                    <div class="order-header">
+                    <span class="order-id">${order.book_id}</span>
+                    <span class="order-status ${statusClass}">${order.status}</span>
+                </div>
+                <div class="order-details">
+                    <span>📅 ${order.book_time}</span>
+                    <!-- <span>${order.items}</span> -->
+                </div>
+                <div class="flex-between" style="margin-top: 0.5rem;">
+                    <span class="order-amount">${order.book_cost}p</span>
+                    <button class="btn-outline repeat-order-btn" style="padding:0.25rem 1rem; font-size:0.75rem;">Повторить</button>
+                </div>
+                </div>
+            </div>
+            <button id="addOrder" class="btn-outline" style="margin-top: 1rem; width:100%; justify-content:center;">Добавить заказ</button>
+        </div>
+
+        <!-- Блок популярных ресторанов (вместо бонусов и быстрых действий) -->
+        <div class="restaurants-card">
+            <div class="section-title" style="font-size:1.3rem;">Популярные рестораны</div>
+            <div class="section-sub">Рекомендуем попробовать</div>
+            <div id="restaurantsContainer" class="restaurants-list">
+                <div class="restwrapper" th:each=" rest : ${restorants}">
+                    <div class="restaurant-header">
+                    <span class="restaurant-cuisine">///</span>
+                    <div class="restaurant-rating">
+                        <span style="color:#f5a623;">///</span>
+                        <span style="color:#6b6b6b; margin-left: 0.2rem;">///</span>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.2rem;">
+                    <span style="font-size: 2rem;">///</span>
+                    <div style="flex:1;">
+                        <div style="font-weight: 600; font-size: 1.1rem; margin-bottom: 0.2rem;" th:text="${rest.restname}">...</div>
+                        <div class="restaurant-details">
+                            <span th:text="${rest.address}">...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-between" style="margin-top: 0.7rem;">
+                    <div style="display: flex; gap: 0.8rem; align-items: center;">
+                        <span class="restaurant-delivery">⏱ ${rest.deliveryTime}</span>
+                        <span class="restaurant-delivery">от ${rest.minOrder} ₽</span>
+                    </div>
+                    <button class="btn-outline order-from-rest-btn" style="padding:0.25rem 1rem; font-size:0.75rem;" data-rest-id="${rest.id}" data-rest-name="${rest.name}">Заказать</button>
+                </div>
+                </div>
+            </div>
+            <button id="refreshRestaurantsBtn" class="btn-outline" style="margin-top: 1rem; width:100%; justify-content:center;">Смотреть все рестораны</button>
+        </div>
+
+        <!-- Дополнительная карточка: акции / рекомендации (full-width) -->
+        <div class="full-width">
+            <div class="action-card" style="background:#fafcfc;">
+                <div class="flex-between">
+                    <div>
+                        <div class="section-title" style="font-size:1.2rem;">Спецпредложения</div>
+                        <div class="section-sub">Скидки и акции для вас</div>
+                    </div>
+                    <span class="badge-status">🔥 Скидка 20% на первый заказ</span>
+                </div>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.8rem;">
+                    <span style="background:#f2f2f2; border-radius:30px; padding:0.3rem 1rem; font-size:0.8rem;">Бесплатная доставка от 1500₽</span>
+                    <span style="background:#f2f2f2; border-radius:30px; padding:0.3rem 1rem; font-size:0.8rem;">Промокод WELCOME</span>
+                    <span style="background:#f2f2f2; border-radius:30px; padding:0.3rem 1rem; font-size:0.8rem;">Кешбэк 10% баллами</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- всплывающее уведомление -->
+<div id="toastMsg" class="toast-message">Уведомление</div>
+
+<script>
+    const addOrder = document.getElementById('addOrder');
+
+    addOrder.addEventListener('click', () => {
+        window.location.href = "/orderform"
+    })
+</script>
+</body>
+</html>

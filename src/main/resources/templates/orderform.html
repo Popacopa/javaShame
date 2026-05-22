@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Оформление заказа</title>
+    <style>
+        /* Глобальный сброс и базовая настройка — чистый минимализм */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.4;
+            color: #1a1a1a;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Кнопка открытия формы */
+        .open-form-btn {
+            background: #000000;
+            color: white;
+            border: none;
+            padding: 0.9rem 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            margin-bottom: 2rem;
+        }
+
+        .open-form-btn:hover {
+            background: #2c2c2c;
+            transform: scale(0.98);
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            border-radius: 24px;
+            max-width: 550px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Стили формы внутри модального окна */
+        .order-form {
+            padding: 1.8rem;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.6rem;
+            font-weight: 550;
+            letter-spacing: -0.3px;
+            color: #111;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: 0.2s;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: #000;
+        }
+
+        /* Группы полей */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #2c2c2c;
+            letter-spacing: -0.2px;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 0.85rem 0.9rem;
+            font-size: 1rem;
+            font-family: inherit;
+            background: #ffffff;
+            border: 1px solid #e2e6ea;
+            border-radius: 16px;
+            transition: 0.2s ease;
+            outline: none;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            border-color: #a0a8b2;
+        }
+
+        /* Список блюд */
+        .food-list {
+            border: 1px solid #e2e6ea;
+            border-radius: 16px;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+
+        .food-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #f0f2f5;
+            cursor: pointer;
+            transition: 0.1s ease;
+        }
+
+        .food-item:hover {
+            background: #f8f9fc;
+        }
+
+        .food-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 1rem;
+            cursor: pointer;
+            accent-color: #000;
+        }
+
+        .food-info {
+            flex: 1;
+        }
+
+        .food-name {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+            font-size: 0.95rem;
+        }
+
+        .food-price {
+            font-size: 0.8rem;
+            color: #6b6b6b;
+        }
+
+        .food-price::before {
+            content: "₽";
+            margin-right: 2px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #e2e6ea;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.1s;
+        }
+
+        .quantity-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .quantity-value {
+            min-width: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* Корзина */
+        .selected-items {
+            background: #f8f9fc;
+            border-radius: 16px;
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .selected-item-tag {
+            display: inline-flex;
+            align-items: center;
+            background: white;
+            border: 1px solid #e2e6ea;
+            border-radius: 30px;
+            padding: 0.3rem 0.8rem;
+            margin: 0.2rem;
+            font-size: 0.8rem;
+        }
+
+        .remove-item {
+            margin-left: 0.6rem;
+            cursor: pointer;
+            color: #999;
+            font-weight: bold;
+        }
+
+        .remove-item:hover {
+            color: #b13b3b;
+        }
+
+        .total-section {
+            padding: 0.8rem;
+            text-align: right;
+            border-top: 1px solid #eef2f5;
+        }
+
+        .total-amount {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        /* Комментарий */
+        .comment-input {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        /* Кнопки формы */
+        .form-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-primary, .btn-secondary {
+            flex: 1;
+            padding: 0.85rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #000000;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2c2c2c;
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #e2e6ea;
+            color: #1f1f1f;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fc;
+            transform: scale(0.98);
+        }
+
+        /* Список заказов */
+        .orders-list {
+            margin-top: 2rem;
+        }
+
+        .orders-title {
+            font-size: 1.3rem;
+            font-weight: 550;
+            margin-bottom: 1rem;
+        }
+
+        .order-card {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #f0f2f4;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: 0.1s ease;
+        }
+
+        /* Уведомление */
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c2c2c;
+            color: white;
+            padding: 0.6rem 1.4rem;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            z-index: 1001;
+            white-space: nowrap;
+        }
+
+        .toast-message.show {
+            opacity: 1;
+        }
+
+        .badge-status {
+            background: #e6f4ea;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+        }
+
+        hr {
+            margin: 1rem 0;
+            border: none;
+            border-top: 1px solid #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="open-form-btn" id="openOrderFormBtn">➕ Сделать заказ</button>
+
+        <div class="orders-list">
+            <div class="orders-title">Рестораны</div>
+            <label for="restaurantSelect">
+
+            </label>
+            <select id="restaurantSelect" required>
+                    <option th:each="rest : ${rests}" th:value="${rest.restid}" th:text="${rest.restname}" >wewe</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Модальное окно с формой заказа -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <form class="order-form" id="orderForm">
+                <div class="modal-header">
+                    <h2 class="modal-title">Оформление заказа</h2>
+                    <button type="button" class="close-modal" id="closeModalBtn">&times;</button>
+                </div>
+
+                <!-- Выбор ресторана -->
+                <div class="form-group">
+
+                </div>
+
+                <!-- Список еды -->
+                <div class="form-group" id="foodGroup" style="display: none;">
+                    <label>Выберите блюда</label>
+                    <div id="foodList" class="food-list"></div>
+                </div>
+
+                <!-- Корзина -->
+                <div id="cartSection" style="display: none;">
+                    <div class="selected-items" id="selectedItems"></div>
+                    <div class="total-section">
+                        <span>Итого:</span>
+                        <span class="total-amount" id="totalAmount">0 ₽</span>
+                    </div>
+                </div>
+
+                <!-- Комментарий -->
+                <div class="form-group">
+                    <label for="comment">Комментарий к заказу</label>
+                    <textarea id="comment" class="comment-input" rows="2" placeholder="Пожелания, особые инструкции..."></textarea>
+                </div>
+
+                <!-- Кнопки -->
+                <div class="form-buttons">
+                    <button type="button" class="btn-secondary" id="cancelBtn">Отмена</button>
+                    <button type="button" class="btn-primary" id="submitOrderBtn">Оформить заказ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastMsg" class="toast-message"></div>
+
+
+    <script>
+        const openOrderFormBtn = document.getElementById('openOrderFormBtn')
+        const select = document.getElementById('restaurantSelect');
+
+
+        openOrderFormBtn.addEventListener('click', () => {
+            const formData = new FormData()
+            formData.append('restaurantId', select.value)
+            //formData.append('restaurantName', this.options[this.selectedIndex].text)
+            fetch('/client/restaurant/select', {
+        method: 'POST',
+        body: formData  // Отправляем как form-data, не JSON
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;  // Переходим по редиректу
+        } else {
+            return response.text();
+        }
+    })
+    .catch(error => console.error('Ошибка:', error));
+        })
+    </script>
+
+
+</body>
+</html>
