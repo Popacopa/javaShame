@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface RestorantRepository extends JpaRepository<Restorant, Integer> {
 
+    Restorant findByRestid(Long id);
+
 }

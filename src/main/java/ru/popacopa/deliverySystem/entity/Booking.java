@@ -10,6 +10,22 @@ import java.time.LocalDateTime;
 @Data
 @Table(name="booking")
 public class Booking {
+
+    public Booking() {}
+    public Booking (Long clientid,
+                    Long courierid,
+                    Long restid,
+                    Long transportid,
+                    String status,
+                    Integer book_cost) {
+        this.clientid = clientid;
+        this.courierid = courierid;
+        this.rest_id = restid;
+        this.status = status;
+        this.transportid = transportid;
+        this.bookcost = book_cost;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="book_id")

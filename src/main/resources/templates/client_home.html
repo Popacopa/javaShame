@@ -415,7 +415,9 @@
                 </div>
                 </div>
             </div>
-            <button id="addOrder" class="btn-outline" style="margin-top: 1rem; width:100%; justify-content:center;">Добавить заказ</button>
+            <div style=" display: flex; min-width: 100%; justify-content: center;">
+                <span class="order-details" th:if="${bookinglist.isEmpty()}">Здесь пока ничего нет 🥲</span>
+            </div>
         </div>
 
         <!-- Блок популярных ресторанов (вместо бонусов и быстрых действий) -->
@@ -442,10 +444,9 @@
                 </div>
                 <div class="flex-between" style="margin-top: 0.7rem;">
                     <div style="display: flex; gap: 0.8rem; align-items: center;">
-                        <span class="restaurant-delivery">⏱ ${rest.deliveryTime}</span>
-                        <span class="restaurant-delivery">от ${rest.minOrder} ₽</span>
+
                     </div>
-                    <button class="btn-outline order-from-rest-btn" style="padding:0.25rem 1rem; font-size:0.75rem;" data-rest-id="${rest.id}" data-rest-name="${rest.name}">Заказать</button>
+                    <button class="btn-outline order-from-rest-btn btn" style="padding:0.25rem 1rem; font-size:0.75rem;" th:onclick="javascript:addOrder( [[${client.clientid}]], [[${rest.restid}]] )">Заказать</button>
                 </div>
                 </div>
             </div>
@@ -476,11 +477,16 @@
 <div id="toastMsg" class="toast-message">Уведомление</div>
 
 <script>
-    const addOrder = document.getElementById('addOrder');
+    const order_from_rest_btn = document.querySelectorAll('.btn')
+    //const addOrder = document.getElementById('addOrder');
+    
+    function addOrder(clientid, restid) {
+        window.location.href="/client/v1/home/" + clientid + "/order?rest=" + restid;
+    }
 
-    addOrder.addEventListener('click', () => {
+    /* addOrder.addEventListener('click', () => {
         window.location.href = "/orderform"
-    })
+    }) */
 </script>
 </body>
 </html>

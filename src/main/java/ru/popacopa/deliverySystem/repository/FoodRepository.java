@@ -12,4 +12,5 @@ import java.util.List;
 public interface FoodRepository extends JpaRepository<Food, Integer> {
 
     List<Food> findByRestid(Long id);
+    Food findByFoodid(Long id);
 }

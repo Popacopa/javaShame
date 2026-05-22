@@ -18,7 +18,11 @@ public class FoodService {
         return foodRepository.findAll();
     }
 
-    public List<Food> findById(Long id) {
+    public Food findById(long id) {
+        return foodRepository.findByFoodid(id);
+    }
+
+    public List<Food> findByRestid(Long id) {
         return foodRepository.findByRestid(id);
     }
 }
