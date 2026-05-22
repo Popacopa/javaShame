@@ -37,19 +37,19 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain ClientFilterChain(@NonNull HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/client/**", "/", "/access", "/client**")
+                .securityMatcher("/client/**", "/", "/client**")
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/client_login", "/client_registration", "/courier_login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/client_registration").permitAll()
-                        .requestMatchers("/client/home**").hasRole("CLIENT")
+                        .requestMatchers("/client/v1/login", "/client/v1/registration", "/courier/v1/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/client/v1/registration").permitAll()
+                        .requestMatchers("/client/v1/home**").hasRole("CLIENT")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/client_login") //Страница логина для клиентов
+                        .loginPage("/client/v1/login") //Страница логина для клиентов
                         .successHandler(customAuthenticationSuccessHandler)
-                        .loginProcessingUrl("/client_auth")    // URL для отправки формы
-                        .failureUrl("/client_login?error=true")    // Куда при ошибке
+                        .loginProcessingUrl("/client/v1/login")    // URL для отправки формы
+                        .failureUrl("/client/v1/login?error=true")    // Куда при ошибке
                         .permitAll()
                 )
                 .userDetailsService(ClientDetailsService())
@@ -64,19 +64,19 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain CourierFilterChain(@NonNull HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/courier**", "/access")
+                .securityMatcher("/courier**", "/courier/v1/**")
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/courier_login", "/courier_registration", "/client_login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/courier_registration").permitAll()
-                        .requestMatchers("/client/home**").hasRole("CLIENT")
+                        .requestMatchers("/courier/v1/login", "/courier/v1/registration", "/client/v1/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/courier/v1/registration").permitAll()
+                        .requestMatchers("/client/v1/home**").hasRole("CLIENT")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/courier_login") //Страница логина для клиентов
+                        .loginPage("/courier/v1/login") //Страница логина для клиентов
                         .successHandler(customAuthenticationSuccessHandler)
-                        .loginProcessingUrl("/courier_auth")    // URL для отправки формы
-                        .failureUrl("/courier_login?error=true")    // Куда при ошибке
+                        .loginProcessingUrl("/courier/v1/login")    // URL для отправки формы
+                        .failureUrl("/courier/v1/login?error=true")    // Куда при ошибке
                         .permitAll()
                 )
                 .userDetailsService(CourierDetailsService())

@@ -235,7 +235,7 @@
     <div class="register-title">Регистрация</div>
 
     <!-- Форма регистрации: поля логин, пароль, выбор роли -->
-    <form id="registrationForm" action="/client_auth" method="post">
+    <form id="registrationForm" action="/client/v1/login" method="post">
         <!-- Поле логин -->
         <p th:if="${error}" style="color: red;">Неверный логин или пароль</p>
         <div class="input-group">
@@ -278,11 +278,11 @@
     const register = document.getElementById('register');
 
     as_coureier_button.addEventListener('click', () => {
-        window.location.href='/courier_login'
+        window.location.href='/courier/v1/login'
     })
 
     register.addEventListener('click', () => {
-        window.location.href='/client_registration'
+        window.location.href='/client/v1/registration'
     })
 </script>
 </body>

@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface CourierRepository extends JpaRepository<Courier, Long> {
 
     Optional<Courier> findByLogin(String login);
+    Optional<Courier> findByCourierid(Long id);
 }

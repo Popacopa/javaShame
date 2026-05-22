@@ -39,12 +39,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         if (isClient) {
             Client client = clientService.findByLogin(user).orElse(null);
             if (client != null) {
-                response.sendRedirect("/client/home/" + client.getClientid().toString());
+                response.sendRedirect("/client/v1/home/" + client.getClientid().toString());
             }
         } else if (isCourier) {
             Courier courier = courierService.findByLogin(user).orElse(null);
             if (courier != null) {
-               response.sendRedirect("/courier/home/" + courier.getCourier_id().toString());
+               response.sendRedirect("/courier/v1/home/" + courier.getCourierid().toString());
             }
         } else {
             response.sendRedirect("/login?error=true");

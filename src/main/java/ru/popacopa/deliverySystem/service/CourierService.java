@@ -22,6 +22,10 @@ public class CourierService {
         return courierRepository.findByLogin(login);
     }
 
+    public Optional<Courier> findByCourierid(Long id) {
+        return courierRepository.findByCourierid(id);
+    }
+
     public Courier addCourier(Courier courier) {
         courierRepository.save(courier);
         return courier;

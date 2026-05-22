@@ -23,7 +23,8 @@ public class Courier {
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long courier_id;
+    @Column(name="courier_id")
+    private Long courierid;
     @Column(nullable = false, unique = true, length = 20)
     private String login;
     @Column(nullable = false, length = 20)

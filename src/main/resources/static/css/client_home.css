@@ -1,0 +1,585 @@
+/* Глобальный сброс и базовая настройка — чистый минимализм */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+    font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    line-height: 1.5;
+    color: #1a1a1a;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+}
+
+.dashboard-wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Карточки — единый минималистичный стиль с улучшенными тенями */
+.profile-card, .orders-card, .restaurants-card, .action-card {
+    background: #ffffff;
+    border-radius: 28px;
+    padding: 1.8rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), 0 8px 24px rgba(0, 0, 0, 0.03);
+}
+
+.profile-card:hover, .orders-card:hover, .restaurants-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.25rem;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.section-sub {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+    border-left: 2px solid #e5e7eb;
+    padding-left: 0.75rem;
+    font-weight: 450;
+}
+
+.profile-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.profile-info {
+    flex: 2;
+    min-width: 240px;
+}
+
+.info-row {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 500;
+    width: 85px;
+    color: #6b7280;
+    font-size: 0.875rem;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+.info-value {
+    color: #1f2937;
+    font-size: 1rem;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+.badge-status {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    padding: 0.3rem 1rem;
+    border-radius: 40px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+    color: #374151;
+    letter-spacing: -0.01em;
+}
+
+/* Кнопки в современном стиле */
+.btn-outline, .btn-primary {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: inherit;
+    border-radius: 48px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    letter-spacing: -0.01em;
+    border: none;
+}
+
+.btn-primary {
+    background: #1a1a1a;
+    color: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary:hover {
+    background: #000000;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-outline {
+    background: transparent;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-outline::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.05);
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+.btn-outline:hover::before {
+    width: 200%;
+    height: 200%;
+}
+
+.btn-outline:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateY(-1px);
+}
+
+.btn-outline:active {
+    transform: translateY(0);
+}
+
+/* Стили для списка заказов */
+.orders-list, .restaurants-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Кастомный скроллбар */
+.orders-list::-webkit-scrollbar, .restaurants-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.orders-list::-webkit-scrollbar-track, .restaurants-list::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 10px;
+}
+
+.orders-list::-webkit-scrollbar-thumb, .restaurants-list::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 10px;
+}
+
+.orders-list::-webkit-scrollbar-thumb:hover, .restaurants-list::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+.order-item, .restaurant-item {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid #f3f4f6;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.order-item:hover, .restaurant-item:hover {
+    border-color: #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transform: translateX(2px);
+}
+
+.order-header, .restaurant-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+
+.order-id, .restaurant-cuisine {
+    font-weight: 600;
+    font-size: 0.75rem;
+    background: #f3f4f6;
+    padding: 0.25rem 0.75rem;
+    border-radius: 30px;
+    color: #4b5563;
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}
+
+.order-status {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.25rem 0.875rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.order-status.delivered {
+    background: #def7ec;
+    color: #03543f;
+}
+
+.order-status.processing {
+    background: #feebc8;
+    color: #9b4a03;
+}
+
+.order-status.cancelled {
+    background: #fde2e2;
+    color: #9b1c1c;
+}
+
+.order-details, .restaurant-details {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0.5rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.order-amount {
+    font-weight: 700;
+    color: #1f2937;
+    font-size: 1rem;
+}
+
+.restaurant-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+.restaurant-delivery {
+    font-size: 0.7rem;
+    background: #f3f4f6;
+    padding: 0.25rem 0.75rem;
+    border-radius: 30px;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+    margin-top: 1.75rem;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    
+    .full-width {
+        grid-column: span 1;
+    }
+    
+    .profile-card, .orders-card, .restaurants-card, .action-card {
+        padding: 1.25rem;
+        border-radius: 24px;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .info-label {
+        width: 80px;
+    }
+    
+    .btn-primary, .btn-outline {
+        padding: 0.6rem 1.25rem;
+        font-size: 0.8125rem;
+    }
+}
+
+/* Toast уведомления */
+.toast-message {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #1f2937;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 60px;
+    font-size: 0.875rem;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: 1000;
+    font-weight: 500;
+    white-space: nowrap;
+    backdrop-filter: blur(10px);
+    background: rgba(31, 41, 55, 0.95);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 640px) {
+    .toast-message {
+        white-space: normal;
+        max-width: 90%;
+        text-align: center;
+        font-size: 0.8125rem;
+    }
+}
+
+.toast-message.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Модальное окно */
+.modalWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modalWrapper.set-visible {
+    display: flex;
+    opacity: 1;
+}
+
+.modal {
+    background: white;
+    border-radius: 32px;
+    padding: 2rem;
+    max-width: 560px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f3f4f6;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.close-modal {
+    background: #f3f4f6;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #6b7280;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.close-modal:hover {
+    background: #e5e7eb;
+    color: #1f2937;
+    transform: rotate(90deg);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.875rem;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    font-size: 0.875rem;
+    font-family: inherit;
+    background: white;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.form-group select:hover {
+    border-color: #d1d5db;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: #1a1a1a;
+    box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
+}
+
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.btn-secondary {
+    padding: 0.7rem 1.5rem;
+    background: #f3f4f6;
+    border: none;
+    border-radius: 48px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #4b5563;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+}
+
+/* Анимации для загрузки */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.loading {
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* Улучшенные hover эффекты для интерактивных элементов */
+button {
+    position: relative;
+    overflow: hidden;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* Стили для пустых состояний */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #9ca3af;
+}
+
+.empty-state::before {
+    content: "📦";
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
