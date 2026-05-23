@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Детали заказа №ORD-2401-892 | Статус и состав</title>
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #f0f2f5;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        padding: 2rem 1.5rem;
+        color: #1a2c3e;
+    }
+
+    /* контейнер */
+    .order-page {
+        max-width: 1280px;
+        margin: 0 auto;
+    }
+
+    /* навигация (хлебные крошки) */
+    .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.8rem;
+        font-size: 0.9rem;
+    }
+    .breadcrumb a {
+        color: #2c6280;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+    .breadcrumb span {
+        color: #5e7e9c;
+    }
+    .separator {
+        color: #9bb1c4;
+    }
+
+    /* карточка заказа */
+    .order-card {
+        background: #ffffff;
+        border-radius: 28px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    /* шапка */
+    .order-header {
+        padding: 1.8rem 2rem 1.2rem 2rem;
+        border-bottom: 1px solid #e9edf2;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        background: #ffffff;
+    }
+    .order-id h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1a2e40;
+        letter-spacing: -0.3px;
+    }
+    .order-meta {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 0.4rem;
+        font-size: 0.85rem;
+        color: #5b748b;
+        flex-wrap: wrap;
+    }
+    .order-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* бейдж статуса (статичный) */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.5rem 1.3rem;
+        border-radius: 60px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        background: #eef6fe;
+        color: #1a5d8c;
+        border-left: 3px solid #2c82c9;
+    }
+    .status-dot {
+        width: 10px;
+        height: 10px;
+        background: #2c82c9;
+        border-radius: 10px;
+        display: inline-block;
+        box-shadow: 0 0 0 2px #d9eaff;
+    }
+
+    /* основная сетка */
+    .order-grid {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 0;
+    }
+
+    @media (max-width: 780px) {
+        .order-grid {
+            grid-template-columns: 1fr;
+        }
+        .order-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        body {
+            padding: 1rem;
+        }
+    }
+
+    /* левая колонка — товары */
+    .items-col {
+        padding: 1.8rem 2rem;
+        background: #ffffff;
+    }
+    .section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1.3rem;
+        border-left: 4px solid #2c6e9e;
+        padding-left: 1rem;
+        color: #1e3b4f;
+    }
+    .items-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .items-table th {
+        text-align: left;
+        padding: 0.8rem 0.5rem 0.7rem 0;
+        font-weight: 600;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: #6c88a2;
+        border-bottom: 1px solid #eef2f8;
+    }
+    .items-table td {
+        padding: 1rem 0.5rem 1rem 0;
+        border-bottom: 1px solid #f0f4fa;
+        vertical-align: middle;
+    }
+    .product-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .product-icon {
+        width: 46px;
+        height: 46px;
+        background: #f4f9ff;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+    .product-name {
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+    .product-sku {
+        font-size: 0.7rem;
+        color: #7d97b2;
+        margin-top: 4px;
+    }
+    .price-cell {
+        font-weight: 600;
+        color: #1f3a4b;
+        white-space: nowrap;
+    }
+    .qty-cell {
+        text-align: center;
+    }
+
+    /* правая колонка — информация */
+    .info-col {
+        background: #fafdff;
+        border-left: 1px solid #e9edf2;
+        padding: 1.8rem 1.6rem;
+    }
+    .info-block {
+        margin-bottom: 2rem;
+    }
+    .info-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #6f8aab;
+        margin-bottom: 0.75rem;
+    }
+    .timestamps {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 0.2rem 0;
+    }
+    .timestamp-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.7rem 0;
+        border-bottom: 1px dashed #e2eaf2;
+    }
+    .timestamp-row:last-child {
+        border-bottom: none;
+    }
+    .timestamp-label {
+        color: #5b7995;
+        font-size: 0.85rem;
+    }
+    .timestamp-value {
+        font-weight: 500;
+        color: #1a2e42;
+        text-align: right;
+    }
+    .status-message-box {
+        background: #eef4fa;
+        border-radius: 20px;
+        padding: 0.9rem 1rem;
+        font-size: 0.85rem;
+        color: #1e4968;
+        margin-top: 0.5rem;
+    }
+    .summary-card {
+        background: #f2f6fc;
+        border-radius: 24px;
+        padding: 1.2rem 1.3rem;
+        margin: 1.2rem 0 1.8rem 0;
+    }
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        font-size: 0.9rem;
+    }
+    .summary-row.total {
+        border-top: 2px solid #dce5f0;
+        margin-top: 0.5rem;
+        padding-top: 0.8rem;
+        font-weight: 800;
+        font-size: 1rem;
+    }
+    .support-contact {
+        font-size: 0.8rem;
+        line-height: 1.4;
+        color: #2c577c;
+        margin-top: 0.3rem;
+    }
+    .footer-note {
+        margin-top: 1.2rem;
+        font-size: 0.7rem;
+        color: #7f99b5;
+        border-top: 1px solid #edf2f8;
+        padding-top: 1rem;
+    }
+    .btn-static {
+        display: inline-block;
+        background: transparent;
+        border: 1px solid #c7d8ea;
+        padding: 0.5rem 1.2rem;
+        border-radius: 40px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #2c6280;
+        cursor: default;
+        pointer-events: none;
+        background: #f9fbfe;
+    }
+  </style>
+</head>
+<body>
+<div class="order-page">
+  <div class="order-card">
+    <!-- шапка: ID и статус -->
+    <div class="order-header">
+      <div class="order-id">
+        <h1 th:text ="|Заказ ${booking.bookid}|">...</h1>
+        <div class="order-meta">
+          <span th:text="|Клиент ${client.lastname}|">...</span>
+          <span>💳 Оплата: карта онлайн</span>
+        </div>
+      </div>
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span th:text="${booking.status}">...</span>
+      </div>
+    </div>
+
+    <div class="order-grid">
+      <!-- ЛЕВАЯ ЧАСТЬ: СОДЕРЖАНИЕ ЗАКАЗА (список товаров) -->
+      <div class="items-col">
+        <div class="section-title">
+          📦 Состав заказа
+        </div>
+        <table class="items-table">
+          <thead>
+          <tr><th>Товар</th><th style="width:70px">Кол-во</th><th style="width:100px">Цена</th><th style="width:110px">Сумма</th></tr>
+          </thead>
+          <tbody th:each="order : ${foodlist}">
+          <!-- товар 1 -->
+          <tr>
+            <td>
+              <div class="product-cell">
+                <div>
+                  <div class="product-name" th:text="${order.foodname}">...</div>
+
+                </div>
+              </div>
+            </td>
+            <td class="qty-cell">1</td>
+            <td class="price-cell" th:text="|${order.foodcost}р|">1 890 ₽</td>
+            <td class="price-cell" th:text="|${order.foodcost}р|">1 890 ₽</td>
+          </tr>
+          <!-- товар 2 -->
+
+          </tbody>
+        </table>
+        <div class="footer-note" th:text="|* Состав зафиксирован в момент оформления ${booking.booktime}|">
+          * Состав зафиксирован в момент оформления 18 февраля 2025
+        </div>
+      </div>
+
+        <!-- Статус заказа и информация о доставке -->
+        <div class="info-block">
+          <div class="info-label">📌 СТАТУС И ДОСТАВКА</div>
+          <div style="margin-top: 12px; display: flex; gap: 12px;">
+            <span class="btn-static">🚚 Отследить</span>
+            <span class="btn-static">📞 Связаться</span>
+          </div>
+        </div>
+        <!-- Примечание о статусе (без js) -->
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

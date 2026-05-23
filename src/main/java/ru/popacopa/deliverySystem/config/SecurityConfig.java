@@ -37,12 +37,10 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain ClientFilterChain(@NonNull HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/client/**", "/", "/client**")
+                .securityMatcher("/client/**", "/")
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/client/v1/login", "/client/v1/registration", "/courier/v1/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/client/v1/registration").permitAll()
-                        .requestMatchers("/client/v1/home**").hasRole("CLIENT")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

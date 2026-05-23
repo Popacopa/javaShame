@@ -15,15 +15,18 @@ public class Booking {
     public Booking (Long clientid,
                     Long courierid,
                     Long restid,
+                    String restname,
                     Long transportid,
                     String status,
                     Integer book_cost) {
         this.clientid = clientid;
         this.courierid = courierid;
         this.rest_id = restid;
+        this.restname = restname;
         this.status = status;
         this.transportid = transportid;
         this.bookcost = book_cost;
+        this.booktime = LocalDateTime.now();
     }
 
     @Id
@@ -36,6 +39,8 @@ public class Booking {
     Long courierid;
     @Column(name="rest_id")
     Long rest_id;
+    @Column(name="restname")
+    String restname;
     @Column(name="transport_id")
     Long transportid;
     @Column(name="book_time")

@@ -20,4 +20,8 @@ public class RestorantService {
     public Restorant findByRestid(Long id) {
         return restorantRepository.findByRestid(id);
     }
+
+    public List<Restorant> findForts5() {
+        return restorantRepository.findFirst5();
+    }
 }

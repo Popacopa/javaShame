@@ -21,6 +21,7 @@ public class BookingService {
     public Booking addBooking(Long clientid,
                               Long courierid,
                               Long restid,
+                              String restname,
                               Long transportid,
                               String status,
                               List<Food> food) {
@@ -31,6 +32,7 @@ public class BookingService {
         final Booking booking = new Booking(clientid,
                                             courierid,
                                             restid,
+                                            restname,
                                             transportid,
                                             status,
                                             total_cost);
@@ -45,6 +47,9 @@ public class BookingService {
         return booking;
     }
 
+    public Booking findById(Long id) {
+        return bookingRepository.findById(id).orElse(null);
+    }
     public List<Booking> findByClientid(Long id) {
         return bookingRepository.findByClientid(id);
     }

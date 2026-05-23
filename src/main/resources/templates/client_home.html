@@ -307,55 +307,6 @@
     </style>
 </head>
 <body>
-
-
-    <div id="orderModal" class="modalWrapper">
-        <div  class="modal">
-            <div class="modal-content">
-                <form action="">
-                            <div class="modal-header">
-                            <h2 class="modal-title">Оформление заказа</h2>
-                            <button class="close-modal" id="closeModalBtn">&times;</button>
-                        </div>
-
-                        <!-- Выбор ресторана -->
-                        <div class="form-group">
-                            <label for="restaurantSelect">Выберите ресторан</label>
-                            <select id="restaurantSelect">
-                                <option value="" th:each="rest : ${restorants}" th:text="${rest.restname}">...</option>
-                            </select>
-                        </div>
-
-                        <!-- Список еды (появляется после выбора ресторана) -->
-                        <div class="form-group" id="foodGroup">
-                            <label>Выберите блюда</label>
-                            <div id="foodList" class="food-list"></div>
-                        </div>
-
-                        <!-- Корзина выбранных блюд -->
-                        <div id="cartSection">
-                            <div class="selected-items" id="selectedItems"></div>
-                            <div class="total-section">
-                                <span>Итого: </span>
-                                <span class="total-amount" id="totalAmount">0 ₽</span>
-                            </div>
-                        </div>
-
-
-
-                        <!-- Кнопки -->
-                        <div class="form-buttons">
-                            <button class="btn-secondary" id="cancelBtn">Отмена</button>
-                            <button class="btn-primary" id="submitOrderBtn">Оформить заказ</button>
-                        </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-
-
 <div class="dashboard-wrapper">
     <!-- Карточка профиля (основная информация) -->
     <div class="profile-card">
@@ -402,17 +353,18 @@
             <div id="ordersContainer" class="orders-list">
                 <div class="orderwrapper" th:each="order : ${bookinglist}">
                     <div class="order-header">
-                    <span class="order-id">${order.book_id}</span>
-                    <span class="order-status ${statusClass}">${order.status}</span>
-                </div>
-                <div class="order-details">
-                    <span>📅 ${order.book_time}</span>
-                    <!-- <span>${order.items}</span> -->
-                </div>
-                <div class="flex-between" style="margin-top: 0.5rem;">
-                    <span class="order-amount">${order.book_cost}p</span>
-                    <button class="btn-outline repeat-order-btn" style="padding:0.25rem 1rem; font-size:0.75rem;">Повторить</button>
-                </div>
+                    <span class="order-id" th:text="${order.restname}" >...</span>
+                    <span class="order-status ${statusClass}" th:text="${order.status}">...</span>
+                    </div>
+                    <div class="order-details">
+                        <span th:text="${order.booktime}">📅</span>
+                        <!-- <span>${order.items}</span> -->
+                    </div>
+                    <div class="flex-between" style="margin-top: 0.5rem;">
+                        <span class="order-amount" th:text="${order.bookcost}">...</span>
+                        <button class="btn-outline repeat-order-btn" style="padding:0.25rem 1rem; font-size:0.75rem;" th:onclick="javascript:getDetails([[${client.clientid}]], [[${order.bookid}]])">Детали</button>
+                    </div>
+                    <hr style="margin-top:20px;">
                 </div>
             </div>
             <div style=" display: flex; min-width: 100%; justify-content: center;">
@@ -427,14 +379,13 @@
             <div id="restaurantsContainer" class="restaurants-list">
                 <div class="restwrapper" th:each=" rest : ${restorants}">
                     <div class="restaurant-header">
-                    <span class="restaurant-cuisine">///</span>
+
                     <div class="restaurant-rating">
-                        <span style="color:#f5a623;">///</span>
-                        <span style="color:#6b6b6b; margin-left: 0.2rem;">///</span>
+
                     </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.2rem;">
-                    <span style="font-size: 2rem;">///</span>
+
                     <div style="flex:1;">
                         <div style="font-weight: 600; font-size: 1.1rem; margin-bottom: 0.2rem;" th:text="${rest.restname}">...</div>
                         <div class="restaurant-details">
@@ -478,15 +429,22 @@
 
 <script>
     const order_from_rest_btn = document.querySelectorAll('.btn')
-    //const addOrder = document.getElementById('addOrder');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const detailsBtn = document.querySelectorAll('.btn')
+
+    logoutBtn.addEventListener('click', () => {
+        window.location.href = "/client/v1/login";
+    })
+
+    function getDetails (clientid, orderid) {
+        window.location.href="/client/v1/home/" + clientid + "/orderdetails?order=" + orderid;
+    }
     
     function addOrder(clientid, restid) {
         window.location.href="/client/v1/home/" + clientid + "/order?rest=" + restid;
     }
 
-    /* addOrder.addEventListener('click', () => {
-        window.location.href = "/orderform"
-    }) */
+
 </script>
 </body>
 </html>
